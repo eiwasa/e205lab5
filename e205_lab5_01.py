@@ -16,6 +16,7 @@ def main():
   ax[0, 0].plot(x, y)
   ax[0, 0].plot(x, y, "k.")
   ax[0, 0].set_title("Problem 1")
+  ax[0, 0].set_ylabel("y position (m)")
 
   desired_traj, distances = construct_dubins_traj([0, -3, -3,  -pi/4], [10, 3, 3, -pi/4])
   t, x, y, theta = zip(*desired_traj)
@@ -32,6 +33,8 @@ def main():
   ax[1, 0].plot(x, y)
   ax[1, 0].plot(x, y, "k.")
   ax[1, 0].set_title("Problem 3")
+  ax[1, 0].set_xlabel("x position (m)")
+  ax[1, 0].set_ylabel("y position (m)")
 
   desired_traj, distances = construct_dubins_traj([0, -3, 0, pi/2], [10, 3, 0, -pi/2])
   t, x, y, theta = zip(*desired_traj)
@@ -40,7 +43,9 @@ def main():
   ax[1, 1].plot(x, y)
   ax[1, 1].plot(x, y, "k.")
   ax[1, 1].set_title("Problem 4")
+  ax[1, 1].set_xlabel("x position (m)")
 
+  plt.subplots_adjust(hspace=0.5)
   plt.show()
 
 

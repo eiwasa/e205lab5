@@ -71,8 +71,18 @@ class PointTracker():
     # zero all of action
     # right wheel velocity
     # left wheel velocity
-    action = [0.0, 0.0]
+    # action = [0.0, 0.0]
     """STUDENT CODE START"""
-
+    time = desired_state[0] - current_state[0]
+    # not correct w and v, will want to solve for based on control laws and calculated alpha, beta, rho values
+    w = (desired_state[-1] - current_state[-1])/time
+    v = ((desired_state[1]-current_state[1])**2 + (desired_state[2]-current_state[2])**2)**(1/2)/time
+    A = [[1,1],
+          [ROBOT_RADIUS, -1*ROBOT_RADIUS]]
+    B = [[w], [v]]
+    x = np.inverse(A).B
+    v_1 = 2*ROBOT_RADIUS*x[0]
+    v_2 = -2*ROBOT_RADIUS*x[1]
+    action = [v_1, v_2]
     """STUDENT CODE END"""
     return action
