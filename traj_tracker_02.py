@@ -103,17 +103,21 @@ class PointTracker():
     # beta = -1*current_state[-1] - alpha + desired_state[-1]
 
     # pick k_alpha, k_beta, k_rho values
-    if rho > 0.3:
+    if rho > 0.05:
       print(f"[far] rho is {rho}")
       k_rho = 1
       k_beta = -1
-      k_alpha = 2
-    else:
+      k_alpha = 5
+    elif rho >0.01:
       print(f"[close] rho is {rho}")
       # for up to trial 0-4: rho 0.01, beta -1, aplha 2 (very slow)
       k_rho = 0.01
-      k_beta = -1
-      k_alpha = 2
+      k_beta = -20
+      k_alpha = 3
+    else:
+      k_rho = 0.01
+      k_beta = -2000
+      k_alpha = 1
       # k_rho = 0.2
       # k_beta = -2
       # k_alpha = 0.3
