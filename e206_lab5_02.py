@@ -26,8 +26,12 @@ def main():
     observation = initial_state
     actual_traj = []
     while not traj_tracker.is_traj_tracked():
+        # pdb.set_trace()
+        print("observation: ", observation)
         current_state = [current_time_stamp, observation[0], observation[1], observation[2]]
         desired_state = traj_tracker.get_traj_point_to_track(current_state)
+        if desired_state == -1:
+          break
         action = controller.point_tracking_control(desired_state, current_state)
         new_observation = run_motion_model(observation, action)
         observation = new_observation

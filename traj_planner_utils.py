@@ -15,6 +15,7 @@ COLLISION_INDEX_STEP_SIZE = 5
 ROBOT_RADIUS = 0.4 #m
 OBSTACLE_RADIUS = 0.4 #m
 WALL_TOLERANCE = 0.0001
+TURNING_RADIUS = 2 #m
 
 def wrap_to_pi(angle):
     """Wrap angle data in radians to [-pi, pi]
@@ -48,7 +49,7 @@ def construct_dubins_traj(traj_point_0, traj_point_1, ignore_time: bool = False)
   end_time = traj_point_1[0]
   point_0 = traj_point_0[1:]
   point_1 = traj_point_1[1:]
-  path = dubins.shortest_path(point_0, point_1, ROBOT_RADIUS)
+  path = dubins.shortest_path(point_0, point_1, TURNING_RADIUS)
   timeless_traj, distance_travelled = path.sample_many(DISTANCE_STEP_SIZE)
   # print(f"timeless_traj: {type(timeless_traj)}")
   # print(f"distance_travelled: {type(distance_travelled)}")
