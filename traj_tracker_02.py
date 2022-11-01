@@ -33,8 +33,7 @@ class TrajectoryTracker():
     """STUDENT CODE START"""
     current_point = self.traj[self.current_point_to_track]
     distance_to_current_traj_point = (((current_point[1] - current_state[1]))**2 + ((current_point[2] - current_state[2])**2))**(1/2)
-    distance_to_current_traj_angle = abs(current_point[-1] - current_state[-1])
-    
+    distance_to_current_traj_angle = abs(wrap_to_pi(current_point[-1] - current_state[-1]))
     # if self.current_point_to_track == self.end_point:
     #   self.current_point_to_track = self.current_point_to_track
 
