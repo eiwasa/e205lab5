@@ -31,7 +31,30 @@ class TrajectoryTracker():
           desired_state (list of floats: The desired state to track - Time, X, Y, Theta (s, m, m, rad).
     """
     """STUDENT CODE START"""
+    current_time_stamp = current_state[0] # 0.5s 0.1 increments
+    next_time = None
+    for idx in range(self.current_point_to_track, len(self.traj)):
+        t = self.traj[idx][0]
+        if current_time_stamp < t:
+          next_time = idx
+          break
+    if next_time == None:
+      return -1
+    else:
+      self.current_point_to_track = next_time
+      return self.traj[self.current_point_to_track]
+    
+    current_point = self.traj[self.current_point_to_track]
+    
+    # distance_to_current_traj_point = (((current_point[1] - current_state[1]))**2 + ((current_point[2] - current_state[2])**2))**(1/2)
+    # distance_to_current_traj_angle = abs(wrap_to_pi(current_point[-1] - current_state[-1]))
+ 
 
+    # if (distance_to_current_traj_point < MIN_DIST_TO_POINT) and (distance_to_current_traj_angle < MIN_ANG_TO_POINT):
+    #   self.current_point_to_track += 1
+
+    # if self.current_point_to_track == len(self.traj):
+    #   return -1
     """STUDENT CODE END"""
     return self.traj[self.current_point_to_track]
 
@@ -67,11 +90,54 @@ class PointTracker():
           desired_state (list of floats): The desired Time, X, Y, Theta (s, m, m, rad).
           current_state (list of floats): The current Time, X, Y, Theta (s, m, m, rad).
     """
+    # pdb.set_trace()
     # zero all of action
     # right wheel velocity
     # left wheel velocity
     action = [0.0, 0.0]
     """STUDENT CODE START"""
+    print(f"[current_state] {current_state}")
+    print(f"[desired_state] {desired_state}")
+    # calculate alpha, beta, rho
+    delta_x = desired_state[1] - current_state[1]
+    delta_y = desired_state[2] - current_state[2]
 
+    rho = ((delta_x**2) + (delta_y**2))**(1/2)
+    alpha = -1*current_state[-1] + math.atan2(delta_y, delta_x)
+    
+    print("[alpha] ", alpha)
+
+    # pick k_alpha, k_beta, k_rho values
+
+    if rho > 0.05:
+      print(f"[far] rho is {rho}")
+      k_rho = 1
+      k_beta = -0.1
+      k_alpha = 15
+    else:
+      k_rho = 1
+      k_beta = -15
+      k_alpha = 3
+
+    
+    # change our v and w equations
+    if abs(alpha) <= pi/2:
+      print("going forward")
+      beta = -1*current_state[-1] - alpha + desired_state[-1]
+      w = k_alpha*alpha + k_beta*beta
+      v = k_rho*rho
+    else:
+      print("going backward")
+      alpha = -1*current_state[-1] + math.atan2(-1*delta_y, -1*delta_x)
+      beta = -1*current_state[-1] - alpha - desired_state[-1]
+      w = k_alpha*alpha + k_beta*beta
+      v = -1*k_rho*rho
+    A = np.array([[1,-1],
+          [ROBOT_RADIUS, 1*ROBOT_RADIUS]])
+    B = np.array([[w], [v]])
+    x = np.dot(np.linalg.inv(A), B)
+    v_1 = 2*ROBOT_RADIUS*x[0]
+    v_2 = -2*ROBOT_RADIUS*x[1]
+    action = [v_1.item(), v_2.item()]
     """STUDENT CODE END"""
     return action
