@@ -124,6 +124,7 @@ class PointTracker():
           [ROBOT_RADIUS, 1*ROBOT_RADIUS]])
     B = np.array([[w], [v]])
     x = np.dot(np.linalg.inv(A), B)
+    # action = [x[0].item(), x[1].item()]
     v_1 = 2*ROBOT_RADIUS*x[0]
     v_2 = -2*ROBOT_RADIUS*x[1]
     action = [v_1.item(), v_2.item()]

@@ -127,6 +127,7 @@ class PointTracker():
       w = k_alpha*alpha + k_beta*beta
       v = k_rho*rho
     else:
+      # pdb.set_trace()
       print("going backward")
       alpha = -1*current_state[-1] + math.atan2(-1*delta_y, -1*delta_x)
       beta = -1*current_state[-1] - alpha - desired_state[-1]
